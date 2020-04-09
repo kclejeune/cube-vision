@@ -21,10 +21,13 @@ class Image(object):
         self.image_path = image_path
         self.image = imageio.imread(image_path)
 
-    def get_folder(self):
+    def get_greyscale(self):
+        return np.dot(self.image[..., :3], [0.299, 0.587, 0.114])
+
+    def get_folder(self) -> str:
         return "/".join(self.image_path.split("/")[:-1])
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "<Filename: " + self.image_path.split("/")[-1] + ">"
 
 
