@@ -13,7 +13,9 @@ from typing import Dict, List
 #     "down": "d.png",
 # }
 
-cube_sides = {"full": "full.png"}
+cube_sides = {
+    "front": "f.jpg",
+}
 
 
 class Image(object):
@@ -22,7 +24,7 @@ class Image(object):
         self.image = imageio.imread(image_path)
 
     def get_greyscale(self):
-        return np.dot(self.image[..., :3], [0.299, 0.587, 0.114])
+        return np.dot(self.image[..., :3], [0.299, 0.587, 0.114]).astype(np.uint8)
 
     def get_folder(self) -> str:
         return "/".join(self.image_path.split("/")[:-1])
@@ -34,9 +36,13 @@ class Image(object):
 class Series(collections.MutableMapping):
     def __init__(self, series_folder):
         self.images: Dict[str, Image] = {}
+        self.series_folder = series_folder
 
         for side_name, side_filename in cube_sides.items():
             self.images[side_name] = Image(path.join(series_folder, side_filename))
+
+    def get_folder(self):
+        return self.series_folder
 
     def __getitem__(self, key) -> Image:
         return self.images[key]
