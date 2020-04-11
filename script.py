@@ -11,7 +11,7 @@ fd = CubeDetector()
 f = Face(series["front"])
 
 fd.detect_face(f)
-fd.detect_cubies(f)
+fd.detect_cublets(f)
 
 plt.imshow(f.get_cublet_image("BL"))
 plt.show()

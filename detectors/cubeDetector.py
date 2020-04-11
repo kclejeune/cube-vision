@@ -51,7 +51,7 @@ class CubeDetector:
         ).astype(int)
         face_state.face_location = (best_fit_loc[::-1] * best_fit_resize).astype(int)
 
-    def detect_cubies(self, face_state: Face):
+    def detect_cublet(self, face_state: Face):
         """Split face into 9 seperate cubies
         
         """
