@@ -2,7 +2,8 @@ import imageio
 import imutils
 import cv2 as cv
 import numpy as np
-from state.face import Face, cublet_names
+from state.face import Face
+from state.constant import CubletNames
 from images.series import Image
 
 
@@ -35,13 +36,13 @@ class CubeDetector:
             ):
                 break
 
-            edge_img = cv.Canny(resized_img, 0, 100)
+            edge_img = cv.Canny(resized_img, 100, 200)
             template_match = cv.matchTemplate(edge_img, self.template, cv.TM_CCOEFF)
 
             (_, maxVal, _, maxLoc) = cv.minMaxLoc(template_match)
 
-            if maxVal > best_fit_value:
-                best_fit_value = maxVal
+            if maxVal * resized_percentage > best_fit_value:
+                best_fit_value = maxVal * resized_percentage
                 best_fit_loc = np.array(maxLoc)
                 best_fit_resize = resized_percentage
 
@@ -70,5 +71,7 @@ class CubeDetector:
                 )
 
                 face_state.set_cublet(
-                    cublet_names[cublet_num], cublet_location, cublet_shape
+                    CubletNames.get_cublet_by_idx(cublet_num),
+                    cublet_location,
+                    cublet_shape,
                 )

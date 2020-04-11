@@ -4,17 +4,13 @@ import numpy as np
 import collections
 from typing import Dict, List
 
-# cube_sides = {
-#     "top": "t.png",
-#     "front": "f.png",
-#     "right": "r.png",
-#     "left": "l.png",
-#     "back": "b.png",
-#     "down": "d.png",
-# }
-
 cube_sides = {
+    "top": "t.jpg",
     "front": "f.jpg",
+    "right": "r.jpg",
+    "left": "l.jpg",
+    "back": "b.jpg",
+    "down": "d.jpg",
 }
 
 
