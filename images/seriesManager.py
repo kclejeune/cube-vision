@@ -1,6 +1,6 @@
 import os
 from glob import glob
-from series import Series
+from images.series import Series
 
 root_path = "/".join(os.path.abspath(__file__).split("/")[:-1])
 series_folder = os.path.join(root_path, "series-folder")
