@@ -1,22 +1,23 @@
 import imageio
+import imutils
 import cv2 as cv
 import numpy as np
-import imutils
+from state.face import Face, cublet_names
 from images.series import Image
 
 
 class CubeDetector:
-    def __init__(self, face: Image):
-        self.face = face
-        self.face_corners = []
+    def __init__(self, cublet_margin=2):
+        self.cublet_margin = cublet_margin
+
         self.template = imageio.imread("./outline-template.png")
 
-    def detect_face(self):
-        """This function detects a face of the cube and finds face corners
+    def detect_face(self, face_state: Face):
+        """This function detects a face of the cube and finds the top left face corner and face size
 
         """
 
-        greyscale_img = self.face.get_greyscale()
+        greyscale_img = face_state.face_image.get_greyscale()
         best_fit_value = 0
         best_fit_loc = (None, None)
         best_fit_resize = None
@@ -44,16 +45,30 @@ class CubeDetector:
                 best_fit_loc = np.array(maxLoc)
                 best_fit_resize = resized_percentage
 
-        # Calculate corners of face
-        tl_corner = (best_fit_loc * best_fit_resize).astype(int)
-        br_corner = ((best_fit_loc + self.template.shape) * best_fit_resize).astype(int)
+        face_state.face_shape = (
+            np.array(self.template.shape) * best_fit_resize
+        ).astype(int)
+        face_state.face_location = (best_fit_loc[::-1] * best_fit_resize).astype(int)
 
-        tr_corner = [tl_corner[0], br_corner[1]]
-        bl_corner = [tl_corner[1], br_corner[0]]
-
-        self.face_corners = [[tl_corner, tr_corner], [bl_corner, br_corner]]
-
-    def face_to_cubies(self):
+    def detect_cubies(self, face_state: Face):
         """Split face into 9 seperate cubies
+        
         """
-        pass
+
+        cublet_shape = ((face_state.face_shape - (6 * self.cublet_margin)) / 3).astype(
+            "int"
+        )
+
+        for vert in range(3):
+            for horiz in range(3):
+                cublet_num = (vert * 3) + horiz
+
+                cublet_location = (
+                    face_state.face_location
+                    + self.cublet_margin
+                    + ((2 * self.cublet_margin + cublet_shape) * [vert, horiz])
+                )
+
+                face_state.set_cublet(
+                    cublet_names[cublet_num], cublet_location, cublet_shape
+                )
