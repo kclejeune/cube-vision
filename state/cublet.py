@@ -15,13 +15,13 @@ class Cublet(object):
             "blue": (0, 0, 255),
             "yellow": (255, 255, 0),
             "orange": (255, 165, 0),
-            "white": (255, 255, 255)
+            "white": (255, 255, 255),
         }
 
     def get_pixels(self, face_image: Image):
         return face_image.image[
-            self.image_position[0]: self.image_position[0] + self.shape[0],
-            self.image_position[1]: self.image_position[1] + self.shape[1],
+            self.image_position[0] : self.image_position[0] + self.shape[0],
+            self.image_position[1] : self.image_position[1] + self.shape[1],
         ]
 
     def __repr__(self):
