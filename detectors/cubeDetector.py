@@ -8,7 +8,7 @@ from images.series import Image
 
 
 class CubeDetector:
-    def __init__(self, cublet_margin=2):
+    def __init__(self, cublet_margin=6):
         self.cublet_margin = cublet_margin
 
         self.template = imageio.imread("./outline-template.png")
