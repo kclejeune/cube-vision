@@ -9,6 +9,18 @@ class Colors:
     BLUE: str = "blue"
     GREEN: str = "green"
 
+    @classmethod
+    def encode(cls, color):
+        encoder = {
+            cls.WHITE: "U",
+            cls.YELLOW: "D",
+            cls.RED: "R",
+            cls.ORANGE: "L",
+            cls.BLUE: "B",
+            cls.GREEN: "F",
+        }
+        return encoder.get(color)
+
 
 class CubletNames:
     TL: str = "top-left"

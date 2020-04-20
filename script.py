@@ -1,11 +1,12 @@
 from state.constant import CubletNames
-from state.cube import Cube
+from state.cube import detect_cube
 from images.seriesManager import get_last_series
 import matplotlib.pyplot as plt
 
 series = get_last_series()
-cube = Cube(series)
-cube.detect_cube()
+cube = detect_cube(series)
+print(cube)
+
 
 # This looks so yummy
 # print([cublet.color for cublet in cube.faces[0]])

@@ -1,5 +1,6 @@
 from images.series import Series
 from state.detector import FaceDetector
+from state.constant import Colors
 from state.face import Face
 from typing import List, Dict, Union
 
@@ -12,21 +13,8 @@ print(MOVESET)
 
 
 class Cube:
-    def __init__(self, series: Series, state=SIDES):
-        self.faces: List[Face] = [Face(series_image) for series_image in series]
-        self.labeled_faces: Dict[str, Face] = {}
-
+    def __init__(self, state=SIDES):
         self.state = str_to_state(state) if isinstance(state, str) else state
-
-    def detect_cube(self):
-        fd = FaceDetector()
-
-        for face in self.faces:
-            fd.detect_face(face)
-            fd.detect_cublets_shape(face)
-            fd.detect_cublets_color(face)
-
-            self.labeled_faces[face.center_color] = face
 
     def solve(self, end_state: Dict[str, List[str]] = SOLVED) -> str:
         end_state = state_to_str(end_state)
@@ -38,6 +26,21 @@ class Cube:
         if not start:
             start = self.state
         pass
+
+
+def detect_cube(series: Series):
+    fd = FaceDetector()
+    faces: List[Face] = [Face(series_image) for series_image in series]
+    encoded_faces: Dict[str, Face] = {}
+
+    for face in faces:
+        fd.detect_face(face)
+        fd.detect_cublets_shape(face)
+        fd.detect_cublets_color(face)
+
+        encoded_faces[Colors.encode(face.center_color)] = face.get_encoded_face()
+
+    return encoded_faces
 
 
 def apply_turn(turn: str, state=SOLVED):

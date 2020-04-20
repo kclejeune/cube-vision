@@ -18,6 +18,17 @@ class Face(object):
 
         self.center_color = None
 
+    def get_encoded_face(self):
+        encoding = np.empty((3, 3), dtype="S1")
+        for vert in range(3):
+            for horiz in range(3):
+                cublet_idx = vert * 3 + horiz
+                current_cublet = self.cublets[CubletNames.get_cublet_by_idx(cublet_idx)]
+
+                encoding[vert][horiz] = Colors.encode(current_cublet.color)
+
+        return encoding
+
     def get_face_image(self):
         return self.full_face_image.image[
             self.face_location[0] : self.face_location[0] + self.face_shape[0],
