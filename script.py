@@ -1,4 +1,5 @@
 from detectors.cubeDetector import CubeDetector
+from state.constant import CubletNames
 from state.face import Face
 from images.seriesManager import get_last_series
 from scipy.signal import correlate2d
@@ -13,5 +14,5 @@ f = Face(series["front"])
 fd.detect_face(f)
 fd.detect_cublets(f)
 
-plt.imshow(f.get_cublet_image("BL"))
+plt.imshow(f.get_cublet_image(CubletNames.BL))
 plt.show()

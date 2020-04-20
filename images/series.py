@@ -2,6 +2,7 @@ import imageio
 from os import path
 import numpy as np
 import collections
+from cv2 import cv2
 from typing import Dict, List
 
 cube_sides = {
@@ -17,7 +18,12 @@ cube_sides = {
 class Image(object):
     def __init__(self, image_path: str):
         self.image_path = image_path
+
         self.image = imageio.imread(image_path)
+        if self.image.shape[1] > 500:
+            rescale_percent = 500 / self.image.shape[1]
+            new_dims = (500, int(rescale_percent * self.image.shape[0]))
+            self.image = cv2.resize(self.image, new_dims, interpolation=cv2.INTER_AREA)
 
     def get_greyscale(self):
         return np.dot(self.image[..., :3], [0.299, 0.587, 0.114]).astype(np.uint8)
