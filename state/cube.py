@@ -1,4 +1,7 @@
-from typing import Dict, List, Union
+from images.series import Series
+from state.detector import FaceDetector
+from state.face import Face
+from typing import List, Dict, Union
 
 import kociemba
 
@@ -9,8 +12,23 @@ print(MOVESET)
 
 
 class Cube:
-    def __init__(self, state=SIDES):
+    def __init__(self, state=SIDES, series: Series):
+        self.faces: List[Face] = [Face(series_image) for series_image in series]
+        self.labeled_faces: Dict[str, Face] = {}
+
         self.state = str_to_state(state) if isinstance(state, str) else state
+
+    
+    def detect_cube(self):
+        fd = FaceDetector()
+
+        for face in self.faces:
+            fd.detect_face(face)
+            fd.detect_cublets_shape(face)
+            fd.detect_cublets_color(face)
+
+            self.labeled_faces[face.center_color] = face
+
 
     def solve(self, end_state: Dict[str, List[str]] = SOLVED) -> str:
         end_state = state_to_str(end_state)

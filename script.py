@@ -1,18 +1,26 @@
-from detectors.cubeDetector import CubeDetector
 from state.constant import CubletNames
-from state.face import Face
+from state.cube import Cube
 from images.seriesManager import get_last_series
-from scipy.signal import correlate2d
-import imageio
-import numpy as np
 import matplotlib.pyplot as plt
 
 series = get_last_series()
-fd = CubeDetector()
-f = Face(series["front"])
+cube = Cube(series)
+cube.detect_cube()
 
-fd.detect_face(f)
-fd.detect_cublets(f)
+# This looks so yummy
+# print([cublet.color for cublet in cube.faces[0]])
+# print([cublet.color for cublet in cube.faces[1]])
+# print([cublet.color for cublet in cube.faces[2]])
+# print([cublet.color for cublet in cube.faces[3]])
+# print([cublet.color for cublet in cube.faces[4]])
+# print([cublet.color for cublet in cube.faces[5]])
 
-plt.imshow(f.get_cublet_image(CubletNames.BL))
-plt.show()
+
+# fig, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3, sharex=True, sharey=True)
+# ax1.imshow(cube.faces[0].get_face_image())
+# ax2.imshow(cube.faces[1].get_face_image())
+# ax3.imshow(cube.faces[2].get_face_image())
+# ax4.imshow(cube.faces[3].get_face_image())
+# ax5.imshow(cube.faces[4].get_face_image())
+# ax6.imshow(cube.faces[5].get_face_image())
+# plt.show()

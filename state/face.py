@@ -7,7 +7,7 @@ import numpy as np
 
 class Face(object):
     def __init__(self, face_image: Image):
-        self.face_image = face_image
+        self.full_face_image = face_image
 
         self.face_shape: np.ndarray = None
         self.face_location: np.ndarray = None
@@ -16,13 +16,22 @@ class Face(object):
             cublet_name: None for cublet_name in CubletNames.get_cublet_order()
         }
 
-        self.face_color = None
+        self.center_color = None
+
+    def get_face_image(self):
+        return self.full_face_image.image[
+            self.face_location[0] : self.face_location[0] + self.face_shape[0],
+            self.face_location[1] : self.face_location[1] + self.face_shape[1],
+        ]
 
     def get_cublet_image(self, cublet_name: str):
-        return self.cublets[cublet_name].get_pixels(self.face_image)
+        return self.cublets[cublet_name].get_pixels(self.full_face_image)
 
-    def set_cublet(self, cublet_name: str, image_position: List, shape: List):
-        self.cublets[cublet_name] = Cublet(image_position, shape)
+    def set_cublet(self, cublet_name: str, cublet_location: List, cublet_shape: List):
+        self.cublets[cublet_name] = Cublet(cublet_location, cublet_shape)
 
-    def set_face_color(self, color: str):
-        self.face_color = color
+    def __getitem__(self, key):
+        return self.cublets[key]
+
+    def __iter__(self):
+        return iter(self.cublets.values())
