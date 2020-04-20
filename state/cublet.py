@@ -1,8 +1,8 @@
 from typing import List
-from images.series import Image
 from scipy.spatial import distance as dist
 from statistics import mean
 import numpy as np
+from images.series import Image
 
 
 class Cublet(object):
@@ -29,14 +29,15 @@ class Cublet(object):
 
     # detect if a cublet is red, green, blue, yellow, orange, or white
     def detect_color(self):
+        pixels = get_pixels(Image)
+        mean_color = pixels.mean(axis=0).mean(axis=0)
         min_dist = np.inf
         face_color = None
         for name, rgb_value in self.colors.items():
-            d = dist.euclidean(rgb_value, self.image_position)
+            d = dist.euclidean(rgb_value, mean_color)
             if d < min_dist:
                 min_dist = d
                 face_color = name
-
         return face_color
 
 
