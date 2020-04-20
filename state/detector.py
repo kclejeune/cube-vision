@@ -3,13 +3,24 @@ import imutils
 import cv2 as cv
 import numpy as np
 from state.face import Face
-from state.constant import CubletNames
+from statistics import mean
 from images.series import Image
+from state.constant import CubletNames
+from scipy.spatial import distance as dist
 
 
-class CubeDetector:
+class FaceDetector:
     def __init__(self, cublet_margin=6):
         self.cublet_margin = cublet_margin
+
+        self.cublet_colors = {
+            "red": (255, 0, 0),
+            "green": (0, 255, 0),
+            "blue": (0, 0, 255),
+            "yellow": (255, 255, 0),
+            "orange": (255, 165, 0),
+            "white": (255, 255, 255),
+        }
 
         self.template = imageio.imread("./outline-template.png")
 
@@ -18,7 +29,7 @@ class CubeDetector:
 
         """
 
-        greyscale_img = face_state.face_image.get_greyscale()
+        greyscale_img = face_state.full_face_image.convert_to_greyscale()
         greyscale_img = cv.GaussianBlur(greyscale_img, (5, 5), 0)
         greyscale_img = cv.Canny(greyscale_img, 100, 200)
         greyscale_img = cv.dilate(greyscale_img, np.ones((5, 5)))
@@ -51,7 +62,7 @@ class CubeDetector:
         ).astype(int)
         face_state.face_location = (best_fit_loc[::-1] * best_fit_resize).astype(int)
 
-    def detect_cublets(self, face_state: Face):
+    def detect_cublets_shape(self, face_state: Face):
         """Split face into 9 seperate cubies
         
         """
@@ -75,3 +86,23 @@ class CubeDetector:
                     cublet_location,
                     cublet_shape,
                 )
+
+    def detect_cublets_color(self, face_state: Face):
+        for cublet_name in CubletNames.get_cublet_order():
+            cublet_pixels = face_state.get_cublet_image(cublet_name)
+            mean_color = cublet_pixels.mean(axis=0).mean(axis=0)
+
+            min_dist = np.inf
+            cublet_color = None
+
+            for rgb_name, rgb_value in self.cublet_colors.items():
+                color_distance = dist.euclidean(rgb_value, mean_color)
+
+                if color_distance < min_dist:
+                    min_dist = color_distance
+                    cublet_color = rgb_name
+
+            face_state.cublets[cublet_name].color = cublet_color
+
+        center_color = face_state[CubletNames.MC].color
+        face_state.center_color = center_color
