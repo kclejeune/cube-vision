@@ -22,7 +22,7 @@ class Colors:
         return encoder.get(color)
 
 
-class CubletNames:
+class CubeletNames:
     TL: str = "top-left"
     TC: str = "top-center"
     TR: str = "top-right"
@@ -36,9 +36,9 @@ class CubletNames:
     BR: str = "bottom-right"
 
     @classmethod
-    def get_cublet_order(cls) -> List[str]:
+    def get_cubelet_order(cls) -> List[str]:
         return [cls.TL, cls.TC, cls.TR, cls.ML, cls.MC, cls.MR, cls.BL, cls.BC, cls.BR]
 
     @classmethod
-    def get_cublet_by_idx(cls, idx) -> str:
-        return cls.get_cublet_order()[idx]
+    def get_cubelet_by_idx(cls, idx) -> str:
+        return cls.get_cubelet_order()[idx]

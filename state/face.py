@@ -1,7 +1,7 @@
 from images.series import Image
-from state.cublet import Cublet
+from state.cubelet import Cubelet
 from typing import Dict, List
-from state.constant import CubletNames, Colors
+from state.constant import CubeletNames, Colors
 import numpy as np
 
 
@@ -12,8 +12,8 @@ class Face(object):
         self.face_shape: np.ndarray = None
         self.face_location: np.ndarray = None
 
-        self.cublets: Dict[str, Cublet] = {
-            cublet_name: None for cublet_name in CubletNames.get_cublet_order()
+        self.cubelets: Dict[str, Cubelet] = {
+            cubelet_name: None for cubelet_name in CubeletNames.get_cubelet_order()
         }
 
         self.center_color = None
@@ -22,10 +22,12 @@ class Face(object):
         encoding = np.empty((3, 3), dtype="S1")
         for vert in range(3):
             for horiz in range(3):
-                cublet_idx = vert * 3 + horiz
-                current_cublet = self.cublets[CubletNames.get_cublet_by_idx(cublet_idx)]
+                cubelet_idx = vert * 3 + horiz
+                current_cubelet = self.cubelets[
+                    CubeletNames.get_cubelet_by_idx(cubelet_idx)
+                ]
 
-                encoding[vert][horiz] = Colors.encode(current_cublet.color)
+                encoding[vert][horiz] = Colors.encode(current_cubelet.color)
 
         return encoding
 
@@ -35,14 +37,16 @@ class Face(object):
             self.face_location[1] : self.face_location[1] + self.face_shape[1],
         ]
 
-    def get_cublet_image(self, cublet_name: str):
-        return self.cublets[cublet_name].get_pixels(self.full_face_image)
+    def get_cubelet_image(self, cubelet_name: str):
+        return self.cubelets[cubelet_name].get_pixels(self.full_face_image)
 
-    def set_cublet(self, cublet_name: str, cublet_location: List, cublet_shape: List):
-        self.cublets[cublet_name] = Cublet(cublet_location, cublet_shape)
+    def set_cubelet(
+        self, cubelet_name: str, cubelet_location: List, cubelet_shape: List
+    ):
+        self.cubelets[cubelet_name] = Cubelet(cubelet_location, cubelet_shape)
 
     def __getitem__(self, key):
-        return self.cublets[key]
+        return self.cubelets[key]
 
     def __iter__(self):
-        return iter(self.cublets.values())
+        return iter(self.cubelets.values())

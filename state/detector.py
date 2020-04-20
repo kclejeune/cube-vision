@@ -5,15 +5,15 @@ import numpy as np
 from state.face import Face
 from statistics import mean
 from images.series import Image
-from state.constant import CubletNames
+from state.constant import CubeletNames
 from scipy.spatial import distance as dist
 
 
 class FaceDetector:
-    def __init__(self, cublet_margin=6):
-        self.cublet_margin = cublet_margin
+    def __init__(self, cubelet_margin=6):
+        self.cubelet_margin = cubelet_margin
 
-        self.cublet_colors = {
+        self.cubelet_colors = {
             "red": (255, 0, 0),
             "green": (0, 255, 0),
             "blue": (0, 0, 255),
@@ -62,47 +62,47 @@ class FaceDetector:
         ).astype(int)
         face_state.face_location = (best_fit_loc[::-1] * best_fit_resize).astype(int)
 
-    def detect_cublets_shape(self, face_state: Face):
+    def detect_cubelets_shape(self, face_state: Face):
         """Split face into 9 seperate cubies
         
         """
 
-        cublet_shape = ((face_state.face_shape - (6 * self.cublet_margin)) / 3).astype(
-            "int"
-        )
+        cubelet_shape = (
+            (face_state.face_shape - (6 * self.cubelet_margin)) / 3
+        ).astype("int")
 
         for vert in range(3):
             for horiz in range(3):
-                cublet_num = (vert * 3) + horiz
+                cubelet_num = (vert * 3) + horiz
 
-                cublet_location = (
+                cubelet_location = (
                     face_state.face_location
-                    + self.cublet_margin
-                    + ((2 * self.cublet_margin + cublet_shape) * [vert, horiz])
+                    + self.cubelet_margin
+                    + ((2 * self.cubelet_margin + cubelet_shape) * [vert, horiz])
                 )
 
-                face_state.set_cublet(
-                    CubletNames.get_cublet_by_idx(cublet_num),
-                    cublet_location,
-                    cublet_shape,
+                face_state.set_cubelet(
+                    CubeletNames.get_cubelet_by_idx(cubelet_num),
+                    cubelet_location,
+                    cubelet_shape,
                 )
 
-    def detect_cublets_color(self, face_state: Face):
-        for cublet_name in CubletNames.get_cublet_order():
-            cublet_pixels = face_state.get_cublet_image(cublet_name)
-            mean_color = cublet_pixels.mean(axis=0).mean(axis=0)
+    def detect_cubelets_color(self, face_state: Face):
+        for cubelet_name in CubeletNames.get_cubelet_order():
+            cubelet_pixels = face_state.get_cubelet_image(cubelet_name)
+            mean_color = cubelet_pixels.mean(axis=0).mean(axis=0)
 
             min_dist = np.inf
-            cublet_color = None
+            cubelet_color = None
 
-            for rgb_name, rgb_value in self.cublet_colors.items():
+            for rgb_name, rgb_value in self.cubelet_colors.items():
                 color_distance = dist.euclidean(rgb_value, mean_color)
 
                 if color_distance < min_dist:
                     min_dist = color_distance
-                    cublet_color = rgb_name
+                    cubelet_color = rgb_name
 
-            face_state.cublets[cublet_name].color = cublet_color
+            face_state.cubelets[cubelet_name].color = cubelet_color
 
-        center_color = face_state[CubletNames.MC].color
+        center_color = face_state[CubeletNames.MC].color
         face_state.center_color = center_color
