@@ -12,13 +12,12 @@ print(MOVESET)
 
 
 class Cube:
-    def __init__(self, state=SIDES, series: Series):
+    def __init__(self, series: Series, state=SIDES):
         self.faces: List[Face] = [Face(series_image) for series_image in series]
         self.labeled_faces: Dict[str, Face] = {}
 
         self.state = str_to_state(state) if isinstance(state, str) else state
 
-    
     def detect_cube(self):
         fd = FaceDetector()
 
@@ -28,7 +27,6 @@ class Cube:
             fd.detect_cublets_color(face)
 
             self.labeled_faces[face.center_color] = face
-
 
     def solve(self, end_state: Dict[str, List[str]] = SOLVED) -> str:
         end_state = state_to_str(end_state)
