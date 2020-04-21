@@ -10,7 +10,7 @@ from scipy.spatial import distance as dist
 
 
 class FaceDetector:
-    def __init__(self, cubelet_margin=6):
+    def __init__(self, cubelet_margin=18):
         self.cubelet_margin = cubelet_margin
 
         self.cubelet_colors = {
