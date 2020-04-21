@@ -40,7 +40,7 @@ def detect_cube(series: Series):
 
         encoded_faces[Colors.encode(face.center_color)] = face.get_encoded_face()
 
-    return encoded_faces
+    return encoded_faces, faces
 
 
 # def apply_turn(turn: str, state=SOLVED):
