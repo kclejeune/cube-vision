@@ -1,10 +1,12 @@
 from state.constant import CubeletNames
-from state.cube import detect_cube
+from state.cube import detect_cube, Cube
 from images.seriesManager import get_last_series
 import matplotlib.pyplot as plt
 
 series = get_last_series()
 rep, cube = detect_cube(series)
+print(Cube(rep).solve())
+
 
 face_num = 5
 

@@ -6,15 +6,26 @@ from typing import List, Dict, Union
 
 import kociemba
 
+# Define MACROS
 SIDES = ["U", "R", "F", "D", "L", "B"]
-SOLVED = str_to_state("".join(side * 6 for side in SIDES))
 MOVESET = SIDES + [side + "'" for side in SIDES]
-print(MOVESET)
+
+# Converter Functions
+def str_to_state(state: str) -> Dict[str, List[str]]:
+    return {side: state[9 * i + j] for i, side in enumerate(SIDES) for j in range(9)}
+
+
+def state_to_str(state: Dict[str, List[str]]) -> str:
+    return "".join("".join(state[side]) for side in SIDES)
+
+
+# Define solved state
+SOLVED = str_to_state("".join(side * 6 for side in SIDES))
 
 
 class Cube:
     def __init__(self, state=SIDES):
-        self.state = str_to_state(state) if isinstance(state, str) else state
+        self.state = state
 
     def solve(self, end_state: Dict[str, List[str]] = SOLVED) -> str:
         end_state = state_to_str(end_state)
@@ -108,11 +119,3 @@ def apply_turn(turn: str, state=SOLVED):
 
 def rotate_clockwise(arr):
     return zip(*arr[::-1])
-
-
-def str_to_state(state: str) -> Dict[str, List[str]]:
-    return {side: state[9 * i + j] for i, side in enumerate() for j in range(9)}
-
-
-def state_to_str(state: Dict[str, List[str]]) -> str:
-    return "".join("".join(state[side]) for side in SIDES)
