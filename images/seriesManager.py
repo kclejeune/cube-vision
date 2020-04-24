@@ -18,10 +18,19 @@ def create_new_series():
     os.mkdir(new_series_path)
 
 
+def get_series(series_num):
+    series_path = glob(os.path.join(series_folder, str(series_num)))[0]
+    if series_path == None:
+        print("Error: Series Number not found")
+        return get_last_series()
+    else:
+        return Series(series_path)
+
+
 def get_last_series():
     all_series = glob(os.path.join(series_folder, "*"))
     last_series_path = sorted(all_series, key=lambda f: int(f.split("/")[-1]))[-1]
-
+    print(last_series_path)
     return Series(last_series_path)
 
 
@@ -39,6 +48,3 @@ def __get_next_session_id__():
 
     session_ids = [int(path.split("/")[-1]) for path in session_paths]
     return sorted(session_ids)[-1] + 1
-
-
-get_last_series()

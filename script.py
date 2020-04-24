@@ -1,9 +1,9 @@
 from state.constant import CubeletNames
 from state.cube import detect_cube, Cube
-from images.seriesManager import get_last_series
+from images.seriesManager import get_last_series, get_series
 import matplotlib.pyplot as plt
 
-series = get_last_series()
+series = get_series(2)
 rep, cube = detect_cube(series)
 print(Cube(rep).solve())
 
