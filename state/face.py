@@ -19,7 +19,7 @@ class Face(object):
         self.center_color = None
 
     def get_encoded_face(self):
-        encoding = np.empty((3, 3), dtype="S1")
+        encoding = np.empty((3, 3), dtype=str)
         for vert in range(3):
             for horiz in range(3):
                 cubelet_idx = vert * 3 + horiz
@@ -29,7 +29,7 @@ class Face(object):
 
                 encoding[vert][horiz] = Colors.encode(current_cubelet.color)
 
-        return encoding
+        return encoding.tolist()
 
     def get_face_image(self):
         return self.full_face_image.image[

@@ -3,6 +3,7 @@ from state.detector import FaceDetector
 from state.constant import Colors
 from state.face import Face
 from typing import List, Dict, Union
+import numpy as np
 
 import kociemba
 
@@ -12,23 +13,27 @@ MOVESET = SIDES + [side + "'" for side in SIDES]
 
 # Converter Functions
 def str_to_state(state: str) -> Dict[str, List[str]]:
-    return {side: state[9 * i + j] for i, side in enumerate(SIDES) for j in range(9)}
+    return {
+        side: [[state[9 * i + (3 * y + x)] for x in range(3)] for y in range(3)]
+        for i, side in enumerate(SIDES)
+    }
 
 
 def state_to_str(state: Dict[str, List[str]]) -> str:
-    return "".join("".join(state[side]) for side in SIDES)
+    return "".join("".join(np.array(state[side]).flatten()) for side in SIDES)
 
 
 # Define solved state
-SOLVED = str_to_state("".join(side * 6 for side in SIDES))
+SOLVED = str_to_state("".join(side * 9 for side in SIDES))
 
 
 class Cube:
     def __init__(self, state=SIDES):
-        self.state = state
+        self.state = str_to_state(state) if isinstance(state, str) else state
 
     def solve(self, end_state: Dict[str, List[str]] = SOLVED) -> str:
         end_state = state_to_str(end_state)
+        print(state_to_str(self.state))
         return kociemba.solve(state_to_str(self.state), patternstring=end_state).split(
             " "
         )
