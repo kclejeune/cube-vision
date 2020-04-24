@@ -8,10 +8,8 @@ from typing import List
 
 
 class Image(object):
-    def __init__(self, image_path: str):
-        self.image_path = image_path
-
-        self.image = imageio.imread(image_path)
+    def __init__(self, image):
+        self.image = image
         self.check_image_size()
 
     def check_image_size(self):
@@ -23,18 +21,13 @@ class Image(object):
     def convert_to_greyscale(self):
         return np.dot(self.image[..., :3], [0.299, 0.587, 0.114]).astype(np.uint8)
 
-    def get_folder(self) -> str:
-        return "/".join(self.image_path.split("/")[:-1])
-
-    def __str__(self) -> str:
-        return "<Filename: " + self.image_path.split("/")[-1] + ">"
-
 
 class Series:
     def __init__(self, series_folder):
         self.series_folder = series_folder
         self.images: List[Image] = [
-            Image(filename) for filename in glob(path.join(self.series_folder, "*"))
+            Image(imageio.imread(filename))
+            for filename in glob(path.join(self.series_folder, "*"))
         ]
 
     def get_folder(self):
