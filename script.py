@@ -1,14 +1,31 @@
 from state.constant import CubeletNames
 from state.cube import detect_cube, Cube
+from images.series import Image
 from images.seriesManager import get_last_series, get_series
 import matplotlib.pyplot as plt
+from camera import Camera
+from cv2 import cv2
 
 series = get_series(2)
 rep, cube = detect_cube(series)
 print(Cube(rep).solve())
 
+# cam = Camera()
+# cv2.namedWindow("cube-vision")
+# while cam.thread.isAlive:
+#     current_image = Image(cam.frame)
 
-def show_side(cube, face_num=5):
+#     cv2.imshow("cube-vision", current_image.image)
+
+#     key = cv2.waitKey(20)
+#     if key == 27:
+#         cam.end()
+#         break
+
+# cv2.destroyAllWindows()
+
+
+def show_side(cube, face_num=0):
     fig, ((ax1, ax2, ax3), (ax4, ax5, ax6), (ax7, ax8, ax9)) = plt.subplots(
         3, 3, sharex=True, sharey=True
     )
