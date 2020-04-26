@@ -3,7 +3,6 @@ import imutils
 import cv2
 import numpy as np
 from state.face import Face
-from statistics import mean
 from images.series import Image
 from state.constant import CubeletNames
 from scipy.spatial import distance as dist
@@ -92,14 +91,17 @@ class FaceDetector:
     def detect_cubelets_color(self, face_state: Face):
         for cubelet_name in CubeletNames.get_cubelet_order():
             cubelet_pixels = face_state.get_cubelet_image(cubelet_name)
-            mean_color = cubelet_pixels.mean(axis=0).mean(axis=0)
+
+            median_color = np.zeros((3))
+            for color_channel in range(3):
+                median_color[color_channel] = np.median(
+                    cubelet_pixels[:, :, color_channel].flatten()
+                )
 
             min_dist = np.inf
             cubelet_color = None
-            cv2.cv2.COLOR_RGB2HSV
-
             for rgb_name, rgb_value in self.cubelet_colors.items():
-                color_distance = dist.euclidean(rgb_value, mean_color)
+                color_distance = dist.euclidean(rgb_value, median_color)
 
                 if color_distance < min_dist:
                     min_dist = color_distance
