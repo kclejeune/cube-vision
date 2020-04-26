@@ -1,6 +1,6 @@
 import imageio
 import imutils
-import cv2 as cv
+import cv2
 import numpy as np
 from state.face import Face
 from statistics import mean
@@ -30,9 +30,9 @@ class FaceDetector:
         """
 
         greyscale_img = face_state.full_face_image.convert_to_greyscale()
-        greyscale_img = cv.GaussianBlur(greyscale_img, (5, 5), 0)
-        greyscale_img = cv.Canny(greyscale_img, 100, 200)
-        greyscale_img = cv.dilate(greyscale_img, np.ones((5, 5)))
+        greyscale_img = cv2.GaussianBlur(greyscale_img, (5, 5), 0)
+        greyscale_img = cv2.Canny(greyscale_img, 100, 200)
+        greyscale_img = cv2.dilate(greyscale_img, np.ones((5, 5)))
 
         best_fit_value = 0
         best_fit_loc = (None, None)
@@ -48,9 +48,11 @@ class FaceDetector:
             if np.any(np.array(resized_img.shape) < np.array(self.template.shape)):
                 break
 
-            template_match = cv.matchTemplate(resized_img, self.template, cv.TM_CCOEFF)
+            template_match = cv2.matchTemplate(
+                resized_img, self.template, cv2.TM_CCOEFF
+            )
 
-            (_, maxVal, _, maxLoc) = cv.minMaxLoc(template_match)
+            (_, maxVal, _, maxLoc) = cv2.minMaxLoc(template_match)
 
             if maxVal * resized_percentage > best_fit_value:
                 best_fit_value = maxVal * resized_percentage
@@ -94,6 +96,7 @@ class FaceDetector:
 
             min_dist = np.inf
             cubelet_color = None
+            cv2.cv2.COLOR_RGB2HSV
 
             for rgb_name, rgb_value in self.cubelet_colors.items():
                 color_distance = dist.euclidean(rgb_value, mean_color)
