@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 from images.seriesManager import get_series
 
 img1 = imageio.imread("./feature.jpg")  # queryImage
-img2 = get_series(2)[4].image
+img2 = get_series(2)[4].convert_to_greyscale()
 
 # Initiate SIFT detector
 orb = cv2.ORB_create()
@@ -24,6 +24,6 @@ matches = bf.match(des1, des2)
 matches = sorted(matches, key=lambda x: x.distance)
 
 # Draw first 10 matches.
-img3 = cv2.drawMatches(img1, kp1, img2, kp2, matches[:100], None, flags=2)
+img3 = cv2.drawMatches(img1, kp1, img2, kp2, matches[0:50], None, flags=2)
 
 plt.imshow(img3), plt.show()
