@@ -30,7 +30,6 @@ def get_series(series_num):
 def get_last_series():
     all_series = glob(os.path.join(series_folder, "*"))
     last_series_path = sorted(all_series, key=lambda f: int(f.split("/")[-1]))[-1]
-    print(last_series_path)
     return Series(last_series_path)
 
 

@@ -33,7 +33,6 @@ class Cube:
 
     def solve(self, end_state: Dict[str, List[str]] = SOLVED) -> str:
         end_state = state_to_str(end_state)
-        print(state_to_str(self.state))
         return kociemba.solve(state_to_str(self.state), patternstring=end_state).split(
             " "
         )
@@ -57,6 +56,14 @@ def detect_cube(series: Series):
         encoded_faces[Colors.encode(face.center_color)] = face.get_encoded_face()
 
     return encoded_faces, faces
+
+
+def detect_face(face: Face):
+    fd = FaceDetector()
+
+    fd.detect_face(face)
+    fd.detect_cubelets_shape(face)
+    fd.detect_cubelets_color(face)
 
 
 def apply_turn(turn: str, state=SOLVED):
