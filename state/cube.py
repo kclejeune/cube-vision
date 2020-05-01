@@ -55,6 +55,11 @@ def detect_cube(series: Series):
 
         encoded_faces[Colors.encode(face.center_color)] = face.get_encoded_face()
 
+    if len(encoded_faces) != 6:
+        raise Exception(
+            "The cube that was found does not have 6 sides, Try better lighting."
+        )
+
     return encoded_faces, faces
 
 
