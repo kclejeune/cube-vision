@@ -15,7 +15,7 @@ def run(args):
     if args.live and args.series != None:
         raise Exception("You can't use the live feature and request a series")
     elif args.live:
-        run_camera()
+        run_camera(args)
     else:
         if args.series != None:
             series = get_series(args.series)
@@ -23,10 +23,21 @@ def run(args):
             series = get_last_series()
 
         rep, cube = detect_cube(series)
-        print(Cube(rep).solve())
+
+        if len(rep) == 6:
+            print(Cube(rep).solve())
+        else:
+            print("The cube that was found does not have 6 sides, Try better lighting.")
+
+        if not args.noimg:
+            for face in cube[:-1]:
+                show_face(face)
+                plt.show(block=False)
+            show_face(cube[-1])
+            plt.show()
 
 
-def run_camera():
+def run_camera(args):
     cam = Camera()
     count = 0
     while cam.thread.isAlive:
@@ -35,7 +46,11 @@ def run_camera():
         face = Face(Image(frame))
         detect_face(face)
 
-        show_face(face)
+        if not args.noimg:
+            show_face(face)
+            plt.show(block=False)
+            plt.pause(2)
+            plt.close()
 
         key = cv2.waitKey(20)
         if key == 27:
@@ -69,14 +84,13 @@ def show_face(face):
     ax9.imshow(face.get_cubelet_image(CubeletNames.BR))
     ax9.set_title(face[CubeletNames.BR].color)
 
-    plt.show(block=False)
-    plt.pause(2)
-    plt.close()
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run Cube Vision")
     parser.add_argument("-s", "--series", help="specify series number", type=int)
+    parser.add_argument(
+        "-n", "--noimg", help="hide cubelet images", action="store_true"
+    )
     parser.add_argument("-l", "--live", help="live cube detection", action="store_true")
     args = parser.parse_args()
 
