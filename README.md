@@ -15,7 +15,7 @@ To see the options allowed run:
 python3 main.py -h
 ```
 
-## Generating Solutions to an Image Set
+### Generating Solutions
 
 We have provided 3 image sets (or Series) of scrambled cubes. Series 2 is the most effective - it can be run from the project root with
 
