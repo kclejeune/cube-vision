@@ -6,7 +6,7 @@ from images.series import Image
 from images.seriesManager import get_last_series, get_series
 
 import matplotlib.pyplot as plt
-from camera import Camera
+from extensions.camera import Camera
 from cv2 import cv2
 import argparse
 

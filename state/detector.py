@@ -22,7 +22,7 @@ class FaceDetector:
             "white": (255, 255, 255),
         }
 
-        self.template = imageio.imread("./outline-template.png")
+        self.template = imageio.imread("./images/outline-template.png")
 
     def detect_face(self, face_state: Face):
         """This function detects a face of the cube and finds the top left face corner and face size
