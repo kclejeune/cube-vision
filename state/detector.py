@@ -89,17 +89,25 @@ class FaceDetector:
                     cubelet_shape,
                 )
 
-    def detect_cubelets_color(self, face_state: Face):
+    def detect_cubelets_color(self, face_state: Face, use_median: bool):
         for cubelet_name in CubeletNames.get_cubelet_order():
             cubelet_pixels = face_state.get_cubelet_image(cubelet_name)
-            mean_color = cubelet_pixels.mean(axis=0).mean(axis=0)
+            found_color = np.zeros((3))
+
+            if use_median:
+                for color_channel in range(3):
+                    found_color[color_channel] = np.median(
+                        cubelet_pixels[:, :, color_channel].flatten()
+                    )
+            else:
+                found_color = cubelet_pixels.mean(axis=0).mean(axis=0)
 
             min_dist = np.inf
             cubelet_color = None
             cv2.cv2.COLOR_RGB2HSV
 
             for rgb_name, rgb_value in self.cubelet_colors.items():
-                color_distance = dist.euclidean(rgb_value, mean_color)
+                color_distance = dist.euclidean(rgb_value, found_color)
 
                 if color_distance < min_dist:
                     min_dist = color_distance

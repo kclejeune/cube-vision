@@ -43,7 +43,7 @@ class Cube:
         pass
 
 
-def detect_cube(series: Series):
+def detect_cube(series: Series, use_median: bool):
     fd = FaceDetector()
     faces: List[Face] = [Face(series_image) for series_image in series]
     encoded_faces: Dict[str, Face] = {}
@@ -51,7 +51,7 @@ def detect_cube(series: Series):
     for face in faces:
         fd.detect_face(face)
         fd.detect_cubelets_shape(face)
-        fd.detect_cubelets_color(face)
+        fd.detect_cubelets_color(face, use_median)
 
         encoded_faces[Colors.encode(face.center_color)] = face.get_encoded_face()
 

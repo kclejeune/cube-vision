@@ -22,7 +22,7 @@ def run(args):
         else:
             series = get_last_series()
 
-        rep, cube = detect_cube(series)
+        rep, cube = detect_cube(series, args.median)
 
         if len(rep) == 6:
             print(Cube(rep).solve())
@@ -92,6 +92,12 @@ if __name__ == "__main__":
         "-n", "--noimg", help="hide cubelet images", action="store_true"
     )
     parser.add_argument("-l", "--live", help="live cube detection", action="store_true")
+    parser.add_argument(
+        "-m",
+        "--median",
+        help="use median to find color instead of mean",
+        action="store_true",
+    )
     args = parser.parse_args()
 
     run(args)
