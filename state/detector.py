@@ -89,7 +89,7 @@ class FaceDetector:
                     cubelet_shape,
                 )
 
-    def detect_cubelets_color(self, face_state: Face, use_median: bool):
+    def detect_cubelets_color(self, face_state: Face, use_median: bool = False):
         for cubelet_name in CubeletNames.get_cubelet_order():
             cubelet_pixels = face_state.get_cubelet_image(cubelet_name)
             found_color = np.zeros((3))
