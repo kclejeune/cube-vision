@@ -2,10 +2,9 @@ import numpy as np
 from cv2 import cv2
 import imageio
 from matplotlib import pyplot as plt
-from images.seriesManager import get_series
 
 img1 = imageio.imread("./feature.jpg")  # queryImage
-img2 = get_series(2)[4].convert_to_greyscale()
+img2 = imageio.imread("../images/series-folder/0/b.jpg")
 
 # Initiate SIFT detector
 orb = cv2.ORB_create()
